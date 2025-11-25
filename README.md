@@ -2,6 +2,8 @@
 
 A Typst template for generating competitive programming contest problem sets (similar to ICPC/XCPC format, inspired by olymp.sty). Create beautifully formatted PDF contest booklets with minimal effort.
 
+![Perview](./screenshots/preview.jpg)
+
 ## Features
 
 - **Professional Formatting**: Generate contest booklets with title pages, table of contents, and consistent problem layouts
