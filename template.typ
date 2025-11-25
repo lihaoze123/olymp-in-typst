@@ -1,4 +1,5 @@
 #import "@preview/numbly:0.1.0": numbly
+#import "@preview/mitex:0.2.6": *
 
 #let fonts = (
   serif: ("New Computer Modern", "FZShuSong-Z01"),
@@ -40,16 +41,28 @@
   = #text(font: fonts.sans, size: 20pt)[#problem.display-name]
   #v(10pt)
 
-  #statement.description
+  #if problem.at("latex", default: false) {
+    mitext(statement.description)
+  } else {
+    eval(statement.description, mode: "markup")
+  }
 
   #if statement.input != none [
     == #text(font: fonts.sans, size: 15pt)[输入格式]
-    #statement.input
+    #if problem.at("latex", default: false) {
+      mitext(statement.input)
+    } else {
+      eval(statement.input, mode: "markup")
+    }
   ]
 
   #if statement.output != none [
     == #text(font: fonts.sans, size: 15pt)[输出格式]
-    #statement.output
+    #if problem.at("latex", default: false) {
+      mitext(statement.output)
+    } else {
+      eval(statement.output, mode: "markup")
+    }
   ]
 
   #if problem.samples.len() > 0 [
@@ -68,7 +81,11 @@
 
   #if statement.notes != none [
     == #text(font: fonts.sans, size: 15pt)[提示]
-    #statement.notes
+    #if problem.at("latex", default: false) {
+      mitext(statement.notes)
+    } else {
+      eval(statement.notes, mode: "markup")
+    }
   ]
 ]
 
@@ -84,6 +101,7 @@
   doc,
 ) = {
   set text(lang: "zh", font: fonts.serif)
+  set document(title: title, author: author)
 
   // 封面页
   if enable-titlepage {
@@ -114,7 +132,7 @@
           align: center,
           // stroke: 0.4pt,
           ..problems.enumerate().map(((i, e)) => (
-            str.from-unicode(int(i) + 65), e.problem.display-name
+            str.from-unicode(int(i) + 65), e.problem.display_name
           )).flatten()
         )
 
@@ -159,7 +177,7 @@
 
     if problems != none {
       for (i, e) in problems.enumerate() {
-        e.problem.display-name = "Problem " + str.from-unicode(int(i) + 65) + ". " + e.problem.display-name
+        e.problem.display-name = "Problem " + str.from-unicode(int(i) + 65) + ". " + e.problem.display_name
         render-problem(e.problem, e.statement)
 
         if i < problems.len() - 1 {

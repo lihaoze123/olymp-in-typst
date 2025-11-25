@@ -8,6 +8,7 @@ A Typst template for generating competitive programming contest problem sets (si
 - **Chinese & Math Support**: Optimized for Chinese text with full mathematical notation support
 - **Sample Cases**: Automatic rendering of input/output samples in professional tables
 - **Auto-numbering**: Problems automatically labeled as "Problem A", "Problem B", etc.
+- **LaTeX Support**: Optional LaTeX rendering via mitex for problems requiring complex formatting
 - **Customizable**: Easy to adapt contest metadata, styling, and fonts
 - **PDF Output**: Direct PDF generation suitable for contest distribution
 
@@ -23,13 +24,18 @@ This template provides two ways to use the `template.typ` file:
 
 ### Method 1: Apply as a Complete Template (Recommended)
 
-Apply the template to your document using `#show` rule, as demonstrated in `main.typ`:
+Apply the template to your document using `#show` rule, as demonstrated in `main.typ`. This is the easiest way to get started:
 
 ```typst
 #import "template.typ": contest-conf
-#import "your-problems.typ": problems
+#import "problems.typ": problems  // or import from your problems file
 
-#show: contest-conf.with(problems: problems)
+#show: contest-conf.with(
+  title: "XCPC Programming Contest",
+  subtitle: "Problem Set",
+  author: "Your Name",
+  problems: problems
+)
 ```
 
 This automatically handles:
@@ -58,7 +64,7 @@ Import specific functions from `template.typ` and use them in your own document:
 ## Quick Start
 
 1. Clone or download this template
-2. Edit `problems.typ` to add your contest problems (see structure below)
+2. Edit `problems.json` to add your contest problems (see structure below)
 3. Build the PDF:
    ```bash
    typst compile main.typ
@@ -66,38 +72,71 @@ Import specific functions from `template.typ` and use them in your own document:
 
 ## Problem Structure
 
-Define your contest problems in `problems.typ` using the following format:
+Define your contest problems in `problems.json` using the following JSON format:
 
-```typst
-#let problems = (
-  (
-    problem: (
-      display-name: "Your Problem Name",
-      samples: (
-        (input: "sample input", output: "sample output"),
-        (input: "another input", output: "another output"),
-      )
-    ),
-    statement: (
-      description: [
-        Problem description with mathematical expressions like $x^2 + y^2 = z^2$.
-      ],
-      input: [Input format description.],
-      output: [Output format description.],
-      notes: [Optional constraints and hints.]
-    )
-  )
-)
+```json
+[
+  {
+    "problem": {
+      "display_name": "Your Problem Name",
+      "latex": false,
+      "samples": [
+        {
+          "input": "sample input",
+          "output": "sample output"
+        },
+        {
+          "input": "another input",
+          "output": "another output"
+        }
+      ]
+    },
+    "statement": {
+      "description": "Problem description with mathematical expressions like $x^2 + y^2 = z^2$.",
+      "input": "Input format description.",
+      "output": "Output format description.",
+      "notes": "Optional constraints and hints."
+    }
+  }
+]
 ```
+
+You can also define problems directly in `problems.typ` using Typst syntax - see the template for both approaches.
 
 ### Problem Components
 
 - **`problem.display-name`**: The title of your problem
+- **`problem.latex`**: Set to `true` to render statement fields as LaTeX using mitex (default: `false`)
 - **`problem.samples`**: Array of sample input/output pairs for problem clarification
 - **`statement.description`**: Full problem description (supports math notation with `$...$`)
 - **`statement.input`**: Format specification for input data
 - **`statement.output`**: Format specification for output data
 - **`statement.notes`**: Optional constraints, hints, or additional notes
+
+### LaTeX Support
+
+If you set `"latex": true` in the problem object, the template will use the [mitex](https://github.com/mitex-rs/mitex) package to render LaTeX content. This is useful when:
+
+- You have existing LaTeX problem statements you want to reuse
+- You need more complex LaTeX features beyond Typst's math mode
+- You're migrating from LaTeX-based contest systems
+
+Example with LaTeX enabled:
+```json
+{
+  "problem": {
+    "display_name": "Complex LaTeX Problem",
+    "latex": true,
+    "samples": [...]
+  },
+  "statement": {
+    "description": "Given a function $f(x) = \\frac{x^2 + 1}{x - 1}$, calculate...",
+    "input": "The input contains an integer $n$.",
+    "output": "Output the result as \\\\textbf{\\frac{result}{2}}$.",
+    "notes": "Constraints: $0 \\\\le n \\\\le 10^9$"
+  }
+}
+```
 
 ## API Reference
 
