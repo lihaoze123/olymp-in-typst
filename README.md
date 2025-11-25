@@ -10,7 +10,7 @@ A Typst template for generating competitive programming contest problem sets (si
 - **Chinese & Math Support**: Optimized for Chinese text with full mathematical notation support
 - **Sample Cases**: Automatic rendering of input/output samples in professional tables
 - **Auto-numbering**: Problems automatically labeled as "Problem A", "Problem B", etc.
-- **LaTeX Support**: Optional LaTeX rendering via mitex for problems requiring complex formatting
+- **Multiple Content Formats**: Support for standard Typst markup, LaTeX rendering, and Markdown
 - **Customizable**: Easy to adapt contest metadata, styling, and fonts
 - **PDF Output**: Direct PDF generation suitable for contest distribution
 
@@ -109,11 +109,14 @@ You can also define problems directly in `problems.typ` using Typst syntax - see
 
 - **`problem.display-name`**: The title of your problem
 - **`problem.latex`**: Set to `true` to render statement fields as LaTeX using mitex (default: `false`)
+- **`problem.markdown`**: Set to `true` to render statement fields as Markdown (default: `false`)
 - **`problem.samples`**: Array of sample input/output pairs for problem clarification
 - **`statement.description`**: Full problem description (supports math notation with `$...$`)
 - **`statement.input`**: Format specification for input data
 - **`statement.output`**: Format specification for output data
 - **`statement.notes`**: Optional constraints, hints, or additional notes
+
+**Content Format Priority**: If both `latex` and `markdown` are set to `true`, LaTeX takes precedence.
 
 ### LaTeX Support
 
@@ -139,6 +142,34 @@ Example with LaTeX enabled:
   }
 }
 ```
+
+### Markdown Support
+
+If you set `"markdown": true` in the problem object, the template will use the [cmarker](https://github.com/typst/packages/tree/main/packages/preview/cmarker) package to render Markdown content. This is useful when:
+
+- You want to use Markdown's simpler syntax for formatting
+- You need structured content with headers, lists, and emphasis
+- You want to maintain readability in the source file
+
+Example with Markdown enabled:
+```json
+{
+  "problem": {
+    "display_name": "Markdown Example Problem",
+    "markdown": true,
+    "samples": [...]
+  },
+  "statement": {
+    "description": "For a given integer $n$, output the squares.\n\n### Examples\n- When $n = 3$, output `1 4 9`\n- When $n = 5$, output `1 4 9 16 25`\n\n### Formula\n\n$$x^2 = x \\times x$$
+",
+    "input": "First line contains integer $n$ ($1 \\le n \\le 1000$).",
+    "output": "Output $n$ numbers separated by spaces.",
+    "notes": "### Constraints\n- $1 \\le n \\le 1000$\n- Results fit in 32-bit integers\n\n### Tips\nUse iterative or formula-based approach."
+  }
+}
+```
+
+The Markdown renderer also supports mathematical expressions using `$...$` for inline math and `$$...$$` for display math, powered by mitex.
 
 ## API Reference
 
@@ -169,9 +200,11 @@ Renders an individual problem with consistent formatting.
 **Parameters:**
 - `problem` (dictionary): Problem metadata containing:
   - `display-name` (str): Problem title (will be prefixed with "Problem A/B/C...")
+  - `latex` (bool, optional): Enable LaTeX rendering (default: `false`)
+  - `markdown` (bool, optional): Enable Markdown rendering (default: `false`)
   - `samples` (array): Array of sample cases (each with `input` and `output`)
 - `statement` (dictionary): Problem statement containing:
-  - `description` (content): Problem description (supports math notation)
+  - `description` (content): Problem description
   - `input` (content, optional): Input format specification
   - `output` (content, optional): Output format specification
   - `notes` (content, optional): Constraints and hints
@@ -185,6 +218,11 @@ Renders an individual problem with consistent formatting.
   pagebreak()
 }
 ```
+
+**Content Rendering:**
+- When `latex` is `true`: Content rendered as LaTeX using mitex
+- When `markdown` is `true`: Content rendered as Markdown using cmarker (with mitex for math)
+- Otherwise: Content evaluated as Typst markup
 
 ### `maketitle`
 

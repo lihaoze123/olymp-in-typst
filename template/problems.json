@@ -106,7 +106,29 @@
       "description": "计算 $n$ 的阶乘。\n\n\\textbf{Definition:} The factorial of a non-negative integer $n$ is the product of all positive integers less than or equal to $n$.",
       "input": "输入一个整数 $n$（$0 \\le n \\le 20$）。",
       "output": "输出 $n!$ 的值。",
-      "notes": "请注意 $20! = 2,432,902,008,176,640,000$。"
+      "notes": "请注意 $20! = 2,432,902,008,176,640,000$ 。"
+    }
+  },
+  {
+    "problem": {
+      "display_name": "Markdown 示例 (Demo)",
+      "markdown": true,
+      "samples": [
+        {
+          "input": "5",
+          "output": "1 4 9 16 25"
+        },
+        {
+          "input": "3",
+          "output": "1 4 9"
+        }
+      ]
+    },
+    "statement": {
+      "description": "对于给定的整数 $n$，输出从 $1$ 到 $n$ 所有整数的平方。\n\n**示例：**\n- 当 $n = 3$ 时，输出 `1 4 9`\n- 当 $n = 5$ 时，输出 `1 4 9 16 25`\n\n### 公式\n\n每个整数的平方可以通过以下公式计算：\n\n$$x^2 = x \\times x$$\n\n其中 $x$ 是从 $1$ 到 $n$ 的整数。",
+      "input": "第一行输入一个整数 $n$（$1 \\le n \\le 1000$）。",
+      "output": "输出 $n$ 个数，第 $i$ 个数是 $i^2$，数之间用空格分隔。",
+      "notes": "### 数据范围\n- $1 \\le n \\le 1000$\n- 结果在 32 位整数范围内\n\n### 提示\n可以使用循环或公式直接计算。"
     }
   }
 ]

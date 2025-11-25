@@ -1,5 +1,8 @@
 #import "@preview/numbly:0.1.0": numbly
+#import "@preview/cmarker:0.1.6": render as cmarker-render
 #import "@preview/mitex:0.2.6": *
+
+#let md = cmarker-render.with(math: mitex)
 
 #let fonts = (
   serif: ("New Computer Modern", "FZShuSong-Z01"),
@@ -43,6 +46,8 @@
 
   #if problem.at("latex", default: false) {
     mitext(statement.description)
+  } else if problem.at("markdown", default: false) {
+    md(statement.description)
   } else {
     eval(statement.description, mode: "markup")
   }
@@ -51,6 +56,8 @@
     == #text(font: fonts.sans, size: 15pt)[输入格式]
     #if problem.at("latex", default: false) {
       mitext(statement.input)
+    } else if problem.at("markdown", default: false) {
+      md(statement.input)
     } else {
       eval(statement.input, mode: "markup")
     }
@@ -60,6 +67,8 @@
     == #text(font: fonts.sans, size: 15pt)[输出格式]
     #if problem.at("latex", default: false) {
       mitext(statement.output)
+    } else if problem.at("markdown", default: false) {
+      md(statement.output)
     } else {
       eval(statement.output, mode: "markup")
     }
@@ -83,6 +92,8 @@
     == #text(font: fonts.sans, size: 15pt)[提示]
     #if problem.at("latex", default: false) {
       mitext(statement.notes)
+    } else if problem.at("markdown", default: false) {
+      md(statement.notes)
     } else {
       eval(statement.notes, mode: "markup")
     }
@@ -149,6 +160,7 @@
   {
     set par(first-line-indent: (amount: 2em, all: true), justify: true, spacing: 0.65em)
     show heading: set block(above: 0.6em)
+    show heading: set text(font: fonts.sans)
 
     set page(
       margin: (top: 3cm, bottom: 2.5cm, x: 2.5cm),
