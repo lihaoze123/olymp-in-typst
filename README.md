@@ -1,5 +1,12 @@
 # Olymp in Typst
 
+[![Gitea Stars](https://img.shields.io/github/stars/lihaoze123/olymp-in-typst)](https://github.com/lihaoze123/olymp-in-typst)
+[![GitHub Release](https://img.shields.io/github/v/release/lihaoze123/olymp-in-typst)](https://github.com/lihaoze123/olymp-in-typst/releases/latest)
+[![GitHub last commit (dev branch)](<https://img.shields.io/github/last-commit/lihaoze123/olymp-in-typst/main?label=last%20commit%20(main%20branch)>)](https://github.com/lihaoze123/olymp-in-typst/commits/main/)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lihaoze123/olymp-in-typst)
+
+[中文](./README.cn.md)
+
 A Typst template for generating competitive programming contest problem sets (similar to ICPC/XCPC format, inspired by olymp.sty). Create beautifully formatted PDF contest booklets with minimal effort.
 
 ![Perview](./screenshots/preview.jpg)
