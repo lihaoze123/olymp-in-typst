@@ -2,6 +2,7 @@
   {
     "problem": {
       "display_name": "Hello, World!",
+      "format": "latex",
       "samples": [
         {
           "input": "World",
@@ -23,6 +24,7 @@
   {
     "problem": {
       "display_name": "A + B",
+      "format": "latex",
       "samples": [
         {
           "input": "1 2",
@@ -44,6 +46,7 @@
   {
     "problem": {
       "display_name": "回文串判断",
+      "format": "latex",
       "samples": [
         {
           "input": "racecar",
@@ -69,6 +72,7 @@
   {
     "problem": {
       "display_name": "数组排序",
+      "format": "latex",
       "samples": [
         {
           "input": "5\n3 1 4 2 5",
@@ -90,7 +94,7 @@
   {
     "problem": {
       "display_name": "LaTeX 示例 (Demo)",
-      "latex": true,
+      "format": "latex",
       "samples": [
         {
           "input": "3",
@@ -112,7 +116,7 @@
   {
     "problem": {
       "display_name": "Markdown 示例 (Demo)",
-      "markdown": true,
+      "format": "markdown",
       "samples": [
         {
           "input": "5",

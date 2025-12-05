@@ -87,7 +87,7 @@
   {
     "problem": {
       "display_name": "你的题目名称",
-      "latex": false,
+      "format": "latex",
       "samples": [
         {
           "input": "样例输入",
@@ -114,19 +114,21 @@
 ### 题目组件
 
   - **`problem.display-name`**: 题目名称（标题）
-  - **`problem.latex`**: 设置为 `true` 以使用 mitex 将题面字段渲染为 LaTeX（默认为 `false`）
-  - **`problem.markdown`**: 设置为 `true` 以将题面字段渲染为 Markdown（默认为 `false`）
+  - **`problem.format`**: 内容格式 - "latex"、"markdown" 或 "markup"（默认为 "latex"）
   - **`problem.samples`**: 用于题目说明的输入/输出样例对数组
   - **`statement.description`**: 完整的题目描述（支持使用 `$...$` 的数学符号）
   - **`statement.input`**: 输入数据的格式说明
   - **`statement.output`**: 输出数据的格式说明
   - **`statement.notes`**: 可选的约束、提示或额外说明
 
-**内容格式优先级**：如果 `latex` 和 `markdown` 都设置为 `true`，LaTeX 优先级更高。
+**内容格式选项**：
+- `"latex"`：使用 mitex 将内容渲染为 LaTeX
+- `"markdown"`：使用 cmarker 将内容渲染为 Markdown（含 mitex 数学支持）
+- `"markup"`：将内容渲染为 Typst 标记
 
 ### LaTeX 支持
 
-如果你在题目对象中设置 `"latex": true`，模板将使用 [mitex](https://github.com/mitex-rs/mitex) 包来渲染 LaTeX 内容。这适用于：
+如果你在题目对象中设置 `"format": "latex"`，模板将使用 [mitex](https://github.com/mitex-rs/mitex) 包来渲染 LaTeX 内容。这适用于：
 
   - 你有希望重用的现有 LaTeX 题目描述
   - 你需要超出 Typst 数学模式的复杂 LaTeX 功能
@@ -138,7 +140,7 @@
 {
   "problem": {
     "display_name": "复杂的 LaTeX 题目",
-    "latex": true,
+    "format": "latex",
     "samples": [...]
   },
   "statement": {
@@ -152,7 +154,7 @@
 
 ### Markdown 支持
 
-如果你在题目对象中设置 `"markdown": true`，模板将使用 [cmarker](https://github.com/typst/packages/tree/main/packages/preview/cmarker) 包来渲染 Markdown 内容。这适用于：
+如果你在题目对象中设置 `"format": "markdown"`，模板将使用 [cmarker](https://github.com/typst/packages/tree/main/packages/preview/cmarker) 包来渲染 Markdown 内容。这适用于：
 
   - 你希望使用 Markdown 更简单的语法进行格式化
   - 你需要带有标题、列表和强调的结构化内容
@@ -164,7 +166,7 @@
 {
   "problem": {
     "display_name": "Markdown 示例题目",
-    "markdown": true,
+    "format": "markdown",
     "samples": [...]
   },
   "statement": {
@@ -193,6 +195,8 @@ Markdown 渲染器也支持使用 `$...$` 进行行内数学公式和 `$$...$$` 
   - `date` (str, 可选): 比赛日期（默认：当前日期）
   - `problems` (array, 必填): 题目对象数组（见题目结构）
   - `enable-titlepage` (bool, 可选): 是否生成扉页（默认：`true`）
+  - `enable-header-footer` (bool, 可选): 是否显示页眉页脚（默认：`true`）
+  - `enable-problem-list` (bool, 可选): 是否在扉页显示题目列表（默认：`true`）
   - `doc` (content, 必填): 文档内容（由 `#show` 规则自动提供）
 
 **返回值:** 包含所有题目的格式化比赛文档
@@ -211,8 +215,7 @@ Markdown 渲染器也支持使用 `$...$` 进行行内数学公式和 `$$...$$` 
 
   - `problem` (dictionary): 题目元数据，包含：
       - `display-name` (str): 题目名称（将被加上前缀 "Problem A/B/C..."）
-      - `latex` (bool, 可选): 启用 LaTeX 渲染（默认：`false`）
-      - `markdown` (bool, 可选): 启用 Markdown 渲染（默认：`false`）
+      - `format` (str, 可选): 内容格式 - "latex"、"markdown" 或 "markup"（默认：`latex`）
       - `samples` (array): 样例数组（每个包含 `input` 和 `output`）
   - `statement` (dictionary): 题目描述，包含：
       - `description` (content): 题目详细描述
@@ -233,9 +236,9 @@ Markdown 渲染器也支持使用 `$...$` 进行行内数学公式和 `$$...$$` 
 
 **内容渲染:**
 
-  - 当 `latex` 为 `true` 时：使用 mitex 将内容渲染为 LaTeX
-  - 当 `markdown` 为 `true` 时：使用 cmarker 将内容渲染为 Markdown（含 mitex 数学支持）
-  - 否则：内容作为 Typst 标记评估
+  - 当 `format` 为 `"latex"` 时：使用 mitex 将内容渲染为 LaTeX
+  - 当 `format` 为 `"markdown"` 时：使用 cmarker 将内容渲染为 Markdown（含 mitex 数学支持）
+  - 当 `format` 为 `"markup"` 或默认时：内容作为 Typst 标记评估
 
 ### `maketitle`
 
@@ -262,9 +265,11 @@ Markdown 渲染器也支持使用 `$...$` 进行行内数学公式和 `$$...$$` 
 
 **包含:**
 
-  - `serif` (array): 衬线字体栈 ("New Computer Modern", "FZShuSong-Z01")
+  - `serif` (array): 衬线字体栈 ("New Computer Modern Math", "FZShuSong-Z01")
   - `sans` (array): 无衬线字体栈 ("CMU Sans Serif", "FZHei-B01")
   - `kaishu` (array): 楷体字体栈 ("FZKai-Z03")
+  - `songti-bold` (array): 宋体粗体字体栈 ("Source Han Serif SC")
+  - `mono` (array): 等宽字体栈 ("FiraCode Nerd Font")
 
 **用法:**
 

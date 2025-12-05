@@ -88,7 +88,7 @@ Define your contest problems in `problems.json` using the following JSON format:
   {
     "problem": {
       "display_name": "Your Problem Name",
-      "latex": false,
+      "format": "latex",
       "samples": [
         {
           "input": "sample input",
@@ -115,19 +115,21 @@ You can also define problems directly in `problems.typ` using Typst syntax - see
 ### Problem Components
 
 - **`problem.display-name`**: The title of your problem
-- **`problem.latex`**: Set to `true` to render statement fields as LaTeX using mitex (default: `false`)
-- **`problem.markdown`**: Set to `true` to render statement fields as Markdown (default: `false`)
+- **`problem.format`**: Content format - "latex", "markdown", or "markup" (default: "latex")
 - **`problem.samples`**: Array of sample input/output pairs for problem clarification
 - **`statement.description`**: Full problem description (supports math notation with `$...$`)
 - **`statement.input`**: Format specification for input data
 - **`statement.output`**: Format specification for output data
 - **`statement.notes`**: Optional constraints, hints, or additional notes
 
-**Content Format Priority**: If both `latex` and `markdown` are set to `true`, LaTeX takes precedence.
+**Content Format Options**:
+- `"latex"`: Render content as LaTeX using mitex
+- `"markdown"`: Render content as Markdown using cmarker (with mitex for math)
+- `"markup"`: Render content as Typst markup
 
 ### LaTeX Support
 
-If you set `"latex": true` in the problem object, the template will use the [mitex](https://github.com/mitex-rs/mitex) package to render LaTeX content. This is useful when:
+If you set `"format": "latex"` in the problem object, the template will use the [mitex](https://github.com/mitex-rs/mitex) package to render LaTeX content. This is useful when:
 
 - You have existing LaTeX problem statements you want to reuse
 - You need more complex LaTeX features beyond Typst's math mode
@@ -138,7 +140,7 @@ Example with LaTeX enabled:
 {
   "problem": {
     "display_name": "Complex LaTeX Problem",
-    "latex": true,
+    "format": "latex",
     "samples": [...]
   },
   "statement": {
@@ -152,7 +154,7 @@ Example with LaTeX enabled:
 
 ### Markdown Support
 
-If you set `"markdown": true` in the problem object, the template will use the [cmarker](https://github.com/typst/packages/tree/main/packages/preview/cmarker) package to render Markdown content. This is useful when:
+If you set `"format": "markdown"` in the problem object, the template will use the [cmarker](https://github.com/typst/packages/tree/main/packages/preview/cmarker) package to render Markdown content. This is useful when:
 
 - You want to use Markdown's simpler syntax for formatting
 - You need structured content with headers, lists, and emphasis
@@ -163,7 +165,7 @@ Example with Markdown enabled:
 {
   "problem": {
     "display_name": "Markdown Example Problem",
-    "markdown": true,
+    "format": "markdown",
     "samples": [...]
   },
   "statement": {
@@ -191,6 +193,8 @@ Main template function that applies the complete contest configuration to your d
 - `date` (str, optional): Contest date (default: current date)
 - `problems` (array, required): Array of problem objects (see Problem Structure)
 - `enable-titlepage` (bool, optional): Whether to generate title page (default: `true`)
+- `enable-header-footer` (bool, optional): Whether to show page headers and footers (default: `true`)
+- `enable-problem-list` (bool, optional): Whether to show problem list on title page (default: `true`)
 - `doc` (content, required): Document content (automatically provided by `#show` rule)
 
 **Returns:** Formatted contest document with all problems
@@ -207,8 +211,7 @@ Renders an individual problem with consistent formatting.
 **Parameters:**
 - `problem` (dictionary): Problem metadata containing:
   - `display-name` (str): Problem title (will be prefixed with "Problem A/B/C...")
-  - `latex` (bool, optional): Enable LaTeX rendering (default: `false`)
-  - `markdown` (bool, optional): Enable Markdown rendering (default: `false`)
+  - `format` (str, optional): Content format - "latex", "markdown", or "markup" (default: "latex")
   - `samples` (array): Array of sample cases (each with `input` and `output`)
 - `statement` (dictionary): Problem statement containing:
   - `description` (content): Problem description
@@ -227,9 +230,9 @@ Renders an individual problem with consistent formatting.
 ```
 
 **Content Rendering:**
-- When `latex` is `true`: Content rendered as LaTeX using mitex
-- When `markdown` is `true`: Content rendered as Markdown using cmarker (with mitex for math)
-- Otherwise: Content evaluated as Typst markup
+- When `format` is `"latex"`: Content rendered as LaTeX using mitex
+- When `format` is `"markdown"`: Content rendered as Markdown using cmarker (with mitex for math)
+- When `format` is `"markup"` or default: Content evaluated as Typst markup
 
 ### `maketitle`
 
@@ -253,9 +256,11 @@ Creates a professional title page for the contest.
 Font configuration dictionary (not a function, but a constant).
 
 **Contains:**
-- `serif` (array): Serif font stack ("New Computer Modern", "FZShuSong-Z01")
+- `serif` (array): Serif font stack ("New Computer Modern Math", "FZShuSong-Z01")
 - `sans` (array): Sans-serif font stack ("CMU Sans Serif", "FZHei-B01")
 - `kaishu` (array): Kaishu font stack ("FZKai-Z03")
+- `songti-bold` (array): Songti Bold font stack ("Source Han Serif SC")
+- `mono` (array): Monospace font stack ("FiraCode Nerd Font")
 
 **Usage:**
 ```typst
