@@ -4,5 +4,6 @@
 #show: contest-conf.with(
   problems: problems,
   enable-header-footer: true,
-  enable-problem-list: true
+  enable-problem-list: true,
+  language: "en"
 )
