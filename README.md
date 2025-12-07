@@ -14,6 +14,7 @@ A Typst template for generating competitive programming contest problem sets (si
 ## Features
 
 - **Professional Formatting**: Generate contest booklets with title pages, table of contents, and consistent problem layouts
+- **Multilingual Support**: Built-in support for Chinese and English with easy language switching
 - **Chinese & Math Support**: Optimized for Chinese text with full mathematical notation support
 - **Sample Cases**: Automatic rendering of input/output samples in professional tables
 - **Auto-numbering**: Problems automatically labeled as "Problem A", "Problem B", etc.
@@ -43,6 +44,7 @@ Apply the template to your document using `#show` rule, as demonstrated in `main
   title: "XCPC Programming Contest",
   subtitle: "Problem Set",
   author: "Your Name",
+  language: "en",  // "zh" for Chinese (default), "en" for English
   problems: problems
 )
 ```
@@ -180,6 +182,26 @@ Example with Markdown enabled:
 
 The Markdown renderer also supports mathematical expressions using `$...$` for inline math and `$$...$$` for display math, powered by mitex.
 
+## Language Support
+
+The template includes built-in support for both Chinese and English. You can switch the language using the `language` parameter in `contest-conf`:
+
+```typst
+#show: contest-conf.with(
+  language: "en",  // Use "zh" for Chinese (default) or "en" for English
+  title: "Programming Contest",
+  problems: problems
+)
+```
+
+The language setting affects all UI elements including:
+- Section headers: "Input", "Output", "Examples", "Note"
+- Sample table headers: "standard input", "standard output"
+- Problem list title: "Problem List"
+- Problem set information and warnings on the title page
+
+**Note:** The language parameter only affects UI text. Problem content (descriptions, input/output specifications, etc.) should be written in your desired language in the problem definitions.
+
 ## API Reference
 
 ### `contest-conf`
@@ -192,6 +214,7 @@ Main template function that applies the complete contest configuration to your d
 - `author` (str, optional): Contest author (default: "初梦")
 - `date` (str, optional): Contest date (default: current date)
 - `problems` (array, required): Array of problem objects (see Problem Structure)
+- `language` (str, optional): Language for UI text - "zh" for Chinese or "en" for English (default: "zh")
 - `enable-titlepage` (bool, optional): Whether to generate title page (default: `true`)
 - `enable-header-footer` (bool, optional): Whether to show page headers and footers (default: `true`)
 - `enable-problem-list` (bool, optional): Whether to show problem list on title page (default: `true`)
@@ -218,6 +241,7 @@ Renders an individual problem with consistent formatting.
   - `input` (content, optional): Input format specification
   - `output` (content, optional): Output format specification
   - `notes` (content, optional): Constraints and hints
+- `language` (str, optional): Language for UI text - "zh" for Chinese or "en" for English (default: "zh")
 
 **Returns:** Rendered problem content
 
