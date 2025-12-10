@@ -173,7 +173,11 @@
 
           #set table(stroke: (x, y) => (
             if y == 0 {
-              (top: 0.4pt, left: 0.4pt, right: 0.4pt)
+              if problems.len() == 1 {
+                (top: 0.4pt, bottom: 0.4pt, left: 0.4pt, right: 0.4pt)
+              } else {
+                (top: 0.4pt, left: 0.4pt, right: 0.4pt)
+              }
             } else if y == problems.len() - 1 {
               (bottom: 0.4pt, left: 0.4pt, right: 0.4pt)
             } else {
