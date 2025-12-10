@@ -5,5 +5,7 @@
   problems: problems,
   enable-header-footer: true,
   enable-problem-list: true,
-  language: "en"
+  language: "en",
+  // titlepage-language: "zh",
+  // problem-language: "en",
 )
